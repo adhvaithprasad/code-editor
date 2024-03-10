@@ -1,0 +1,199 @@
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Borel&family=DM+Sans:opsz,wght@9..40,500&family=Gochi+Hand&family=Inter&family=Josefin+Sans&family=Poppins&display=swap');
+body {
+    display: flex;
+    margin: 0;
+    width: 100%;
+    height: 100vh;
+    background: #0f1625;
+    flex-direction: row;
+}
+.project-creator {
+    height: fit-content;
+    width: 40%;
+    padding: 5px;
+    display: none;
+    background: #151d2f;
+    margin: 15px;
+    display: none;
+    flex-direction: column;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.project-creator input {
+    height: 25px;
+    margin: 5px 0px;
+  font-family: 'Inter', sans-serif;
+    outline: none;
+    color: white;
+    width: 90%;
+    border: none;
+    background: #1f2543;
+    border-radius: 5px;
+}
+.project-creator button {
+    padding: 5px 40px;
+    width: fit-content;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    background: #2196F3;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+}
+.project-creator input:focus {
+    border: 3px solid #2196F3;
+    border-radius: 5px;
+}
+img#user-img {
+    height: 25%;
+    border-radius: 50%;
+    border: 2px solid grey;
+}
+
+
+.repo:hover {
+    background: #80808012;
+}
+#list-repos .repo {
+    padding: 13px;
+    width: calc(100% - 44px);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    margin: 0px 4px;
+    border-radius: 0px;
+    border-bottom: 1px solid #636262a1;
+}
+.repo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+div#list-repos {
+    margin: 10px;
+    width: calc(100% - 380px);
+    height: calc(100% - 20px);
+}
+
+div#user-detail {
+    margin: 10px;
+    padding: 20px;
+    display: flex;
+    border-radius: 10px;
+    margin-top: 100px;
+    width: 300px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+a#email {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: white;
+    background: #80808033;
+    padding: 5px;
+    border-radius: 10px;
+    font-family: 'Inter';
+    font-weight: 600;
+    cursor: pointer;
+}
+a#email svg {
+    margin-right: 10px;
+}
+h1#username {
+    color: white;
+    font-family: 'DM sans';
+}
+#list-repos .repo-header a {
+    font-family: 'Inter', cursive;
+    text-decoration: none;
+    display: flex;
+    color: white;
+    align-items: center;
+    font-weight: 600;
+    font-size: 15px;
+}
+#list-repos .repo-header a svg {
+    margin-right: 11px;
+    padding: 5px;
+    background: #4a4a4a38;
+    border-radius: 5px;
+}
+#list-repos .repo-header a p {
+    color: grey;
+    font-size: 12px;
+    border: 1px solid #80808082;
+    margin: 0;
+    padding: 3px 5px;
+    margin-left: 19px;
+    border-radius: 10px;
+}
+button.create:hover {
+    background: #0079F2;
+}
+button.create {
+    margin: 15px 0px;
+    padding: 8px;
+    width: 20%;
+    outline: none;
+    cursor: pointer;
+    border: none;
+    font-family: 'Inter';
+    text-transform: capitalize;
+    border-radius: 5px;
+    font-weight: 600;
+    color: white;
+    background: #0053A6;
+}
+.repo-header button {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 78px;
+    border-radius: 5px;
+    border: none;
+    font-family: 'Inter';
+    font-size: 13px;
+    font-weight: 600;
+    background: #18181880;
+    color: grey;
+}
+.repo-footer {
+    padding: 9px 4px;
+}
+.repo-footer p {
+    margin: 0;
+    font-family: 'Inter';
+    font-size: 13px;
+    font-weight: 600;
+    color: grey;
+}
+.search-repo {
+    display: flex;
+    align-items: center;
+}
+.search-repo input {
+  height: 20px;
+  margin: 0px 5px;
+  padding: 4px 6px;
+  flex: 1;
+  width: 100%;
+  background: #6b6b6b2b;
+  border: 1px solid grey;
+  border-radius: 5px;
+  outline: none;
+  font-weight: 600;
+  color: white;
+}
+.search-repo input:focus{
+  
+  border: 2px solid #2196f3;
+}

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Vaultin</title>
+  <!-- Material Icons font -->
+  <link rel=stylesheet href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <!-- Firebase scripts -->
+  <script src=https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js></script>
+  <script src=https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js></script>
+  <script src=https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js></script>
+
+  <!-- SHA-1 library -->
+  <script src=https://cdn.jsdelivr.net/gh/emn178/js-sha1/build/sha1.min.js></script>
+  <!-- zipper loader  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <!-- Monaco editor loader -->
+  <script src=https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs/loader.min.js
+   
+    crossorigin=anonymous referrerpolicy=no-referrer></script>
+
+
+  <!-- Custom stylesheets -->
+  <link rel=stylesheet href=http://localhost:3000/cdn/editor/style/style.css>
+  <link rel=stylesheet href=http://localhost:3000/cdn/editor/style/editor-tokens.css>
+</head>
+
+<body>
+
+
+  <div id=get-repo style=display:none>
+    <div id=search-repo>
+      <input placeholder="Search for user on github" id=ghuser>
+      <button onclick=getrepos()><i class="material-icons mdc-button__icon" aria-hidden=true> search </i>Search</button>
+    </div>
+    <div id=search-repo-contents></div>
+  </div>
+  <!-- Start of no-repo-shadow div -->
+  <div id=no-repo-shadow>
+    <!-- Open repository section -->
+    <div id=open-repo>
+      <h1>Create</h1>
+      <h1>Innovate</h1>
+      <h1 style=color:#87cefa>Code</h1>
+    </div>
+
+    <!-- Get repository section -->
+
+
+    <!-- Sign-in form -->
+    <form id=sign-in>
+
+      <button type=button id=github-signup>Sign Up with GitHub</button>
+      <button type=button id=google-signup>Sign Up with Google</button>
+    </form>
+  </div>
+  <!-- End of no-repo-shadow div -->
+
+  <!-- Main editor section -->
+  <div class=main--editor>
+    <div class="terminal"></div>
+    <main id=user_div class=loggedin-div>
+      <div id="create-file">
+        <div class="create-header">
+          <h3>New file</h3>
+        </div>
+        <div class="create-main">
+          <input type="text" id="new-file-name">
+        </div>
+        <div class="create-footer">
+          <button class="create-file-cancel">cancel</button>
+          <button class="create-file-new">Create</button>
+        </div>
+      </div>
+      <div id="create-folder">
+        <div class="create-header">New Folder</div>
+        <div class="create-main">
+          <input type="text" id="new-file-name">
+        </div>
+        <div class="create-footer">
+          <button class="create-file-cancel">cancel</button>
+          <button class="create-file-new">Create</button>
+        </div>
+      </div>
+      <div class=many>
+
+        <div class="nav" style="display:none">
+          <div class="icons">
+            <img src="https://dartpad.dev/dart-192.png">
+            <i onclick=filetab() class="material-icons mdc-button__icon filetab" aria-hidden=true type="button">
+              source</i>
+            <!-- <i onclick=reviewtab() class="material-icons mdc-button__icon reviewtab" aria-hidden=true type="button"> rate_review</i> -->
+            <i onclick=gittab() class="material-icons mdc-button__icon gittab" aria-hidden=true type="button">
+              commit</i>
+          </div>
+          <!-- <i  class="material-icons mdc-button__icon apitab" aria-hidden=true type="button"> sync_alt</i> -->
+         
+        </div>
+        <!-- Output and file container -->
+        <div id=output class=filecontainer>
+          <div class="output-header">
+            <div class="output-file-header" id="output-file-header" style="display:flex;align-items:center;width: 100%;justify-content: space-between;">
+
+              <div style="display:flex;width: 100%;justify-content: space-between;align-items: center;">
+                <img height="20" id="user-image-editor"/>
+                <h3>Vaultin</h3>
+               <div style="display:flex;">
+                 <button fdprocessedid="onja1k"><svg class="with-icon_icon__MHUeb" data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color:var(--geist-foreground);width:20px;height:20px"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"></path><path d="M12 11v6"></path><path d="M9 14h6"></path></svg></button>
+
+                 <button fdprocessedid="i6ypz9"><svg class="with-icon_icon__MHUeb" data-testid="geist-icon" fill="none" height="10" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="10" style="color:var(--geist-foreground);width:20px;height:20px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><path d="M14 2v6h6"></path><path d="M12 18v-6"></path><path d="M9 15h6"></path></svg></button>
+
+                 <button onclick="gittab()" fdprocessedid="ovqizk"><svg class="with-icon_icon__MHUeb" data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color:var(--geist-foreground);width:20px;height:20px"><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="19" cy="12" r="1" fill="currentColor"/><circle cx="5" cy="12" r="1" fill="currentColor"/></svg></button>
+               </div>
+
+
+
+              </div>
+
+            </div>
+            <div class="output-git-header" id="output-git-header" style="display:flex;justify-content:space-between">
+               <button onclick=filetab()><svg class="with-icon_icon__MHUeb" data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color:var(--geist-foreground);width:20px;height:20px"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></button>
+         
+              <div style="display:flex;justify-content:flex-start">
+              <button><svg class="with-icon_icon__MHUeb" data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color:var(--geist-foreground);width:20px;height:20px"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 009 9"/></svg></button>
+              <button><svg class="with-icon_icon__MHUeb" data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color:var(--geist-foreground);width:20px;height:20px"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 012 2v7"/><path d="M6 9v12"/></svg></button></div>
+            </div>
+          </div>
+          <ul id=root>
+
+          </ul>
+          <ul id=git_cont>
+            <textarea id="commit_message"></textarea>
+            <button class="add_channel" onclick=commit()><svg class="with-icon_icon__MHUeb" data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color:var(--geist-foreground);width:20px;height:20px"><circle cx="12" cy="12" r="4"/><path d="M1.05 12H7"/><path d="M17.01 12h5.95"/></svg> add commit</button>
+            <div id="git_files_cont"></div>
+          </ul>
+
+        </div>
+
+        <div id="no-repo-chosen">
+          
+        </div>
+        <div class="editor-container" id="editor-main-container">
+
+          <div id="editor-header"></div>
+          <div style="display:none" id=firepad-diff-container></div>
+          <div style="display:flex" id=firepad-container></div>
+          <div id="editor-footer">
+            <!-- <img alt="" id=user-image-editor onclick=logout()> -->
+            <div>
+              <select id="branches"></select>
+              <button onclick=gotoline() id="positionButton"></button>
+              <i class="material-icons mdc-button__icon" aria-hidden="true" onclick=format()>format_align_left</i>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+  <!-- JavaScript scripts -->
+  <script src=https://raw.githubusercontent.com/sylphus-com/console/main/logger.js></script>
+  <script src=http://localhost:3000/cdn/editor/scripts/auth.js></script>
+  <script src=http://localhost:3000/cdn/editor/scripts/main.js></script>
+  
+</body>
+
+</html>
