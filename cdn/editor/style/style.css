@@ -1486,7 +1486,7 @@ p.git-date {
 .terminal {
   position: absolute;
   background: var(--prima-nocta-lighter);
-  height: 90%;
+  height: 89%;
   width: 40%;
   border-radius: 10px;
   z-index: 1;
