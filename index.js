@@ -9,7 +9,7 @@ var express = require("express");
 var app = express();
 const { Git: Server } = require('node-git-server');
 const corsOptions = {
-  origin: 'http://localhost:3000/',
+  origin: 'http://localhost:8000/',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   optionsSuccessStatus: 204, // No content status for preflight OPTIONS request
 };
@@ -19,7 +19,7 @@ app.use(express.json());
 const repos = new Server(path.resolve(__dirname, 'tmp'), {
   autoCreate: true
 });
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 function clone(rdir, url) {
   const dir = path.join(process.cwd(), "assets", rdir);
   git.clone({ fs, http, dir, url }).then(console.log)

@@ -16,7 +16,7 @@ function cloneProject() {
   const cloneUrl = document.querySelector('#cloneUrl').value;
 
   if (projectName && cloneUrl) {
-    const url = 'http://localhost:3000/clone/';
+    const url = 'http://localhost:8000/clone/';
     const body = JSON.stringify({
       url: cloneUrl,
       dir: projectName
