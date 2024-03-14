@@ -1,5 +1,5 @@
 const terminal = new Terminal();
-const socket = new WebSocket('ws://localhost:3000');
+const socket = new WebSocket('ws://localhost:8000');
 terminal.open(document.getElementById('terminal'));
 const fitAddon = new FitAddon.FitAddon();
 terminal.loadAddon(fitAddon);
