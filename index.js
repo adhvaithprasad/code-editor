@@ -169,6 +169,7 @@ app.get('/content/:branch/:dir/:file', async (req, res) => {
 
 app.use("/editor",express.static("public"))
 app.use("/cdn", express.static("cdn"))
+app.use("/signup/:k", express.static("signup"))
 app.use("/editor/:repo", express.static("editor"))
 app.use('/git', function (req, res) {
   repos.handle(req, res)

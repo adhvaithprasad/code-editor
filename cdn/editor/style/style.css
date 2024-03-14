@@ -513,58 +513,7 @@ div#open-repo {
     justify-content: center;
     align-items: center;
 }
-#get-repo {
-    height: 572px;
-    position: absolute;
-    z-index: 10;
-    background: #0b101c;
-    width: 380px;
-    top: 55px;
-  display:none;
-    padding: 20px;
-    /* border-radius: 10px; */
-}
-div#search-repo {
-    /* padding: 10px; */
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-}
-div#search-repo input {
-    outline: none;
-    font-family: 'DM sans';
-    padding: 10px;
-    width: inherit;
-    margin: 0px 7px;
-    border: none;
-    font-weight: 600;
-    background: #2d3447;
-    color: white;
-    border-radius: 6px;
-}
-div#search-repo button {
-    padding: 6px 21px;
-    border-radius: 5px;
-    border: none;
-    font-family: 'DM sans';
-    height: 39px;
-    display: flex;
-    color: #0f1625;
-    font-weight: 600;
-    background: #2196F3;
-    outline: none;
-    align-items: center;
-}
 
-div#search-repo button i {
-    font-size: 17px;
-    margin-right: 7px;
-}
-div#search-repo-contents {
-    margin-top: 30px;
-    height: 90%;
-    overflow: auto;
-}
 .repo-info {
     letter-spacing: 1px;
     color: white;

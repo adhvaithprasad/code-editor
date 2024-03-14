@@ -1,3 +1,4 @@
+
 /**
  * Firebase configuration and initialization.
  * Configures the Firebase SDK with the provided credentials.
@@ -16,35 +17,21 @@ firebase.initializeApp(config);
 var db = firebase.database();
 
 
-var url = window.location.href;
-
-const afterEditorIndex = url.indexOf("/editor/") + "/editor/".length;
 
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         const uid = user.uid;
-      getRepoFiles();
-          document.getElementById("no-repo-chosen").style.display = "none";
-
-                document.querySelector(".main--editor").style.display = "block";
-      init();
-
-        // Display user image
+      
 
 
         if (user !== null) {
-            user.providerData.forEach(providerData => {
-                document.getElementById("user-image-editor").src = providerData.photoURL;
-            });
+            var x = window.location.href.split("/signup/")[1];
+            window.location.href="http://localhost:8000/editor/"+x;
         }
     } else {
-        
-        if (afterEditorIndex !== -1) {
-            const afterEditor = url.substring(afterEditorIndex);
-            window.location.href = "http://localhost:8000/signup/"+afterEditor;
-        } else {
-            console.log("No '/editor/' found in the URL.");
-        }
+        document.getElementById("no-repo-shadow").style.display = "flex";
+        document.getElementById("sign-in").style.display = "flex";
+       
     }
 });
 
@@ -139,6 +126,3 @@ function sidebar(){
     window.editor.layout()
   }
 }
-
-
-
