@@ -1,4 +1,3 @@
-tmp/
-assets
-node_modules/
-jkssrdhflk
+/node_modules
+/tmp
+/assets

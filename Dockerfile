@@ -13,8 +13,11 @@ RUN npm install
 # Copy backend and frontend code
 COPY . .
 
+
 # Expose port 3000
 EXPOSE 8000
 
 # Start the application
 CMD ["npm", "start"]
+
+
