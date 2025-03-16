@@ -385,7 +385,7 @@ button.deploy-button {
     background: var(--prima-nocta-darker);
     color: var(--terminal-text);
     font-weight: 600;
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM sans', sans-serif;
     border: none;
     align-items: center;
     border-right: 1px solid #80808033;
@@ -403,6 +403,7 @@ button.deploy-button {
     margin: 0;
     overflow: auto;
     padding: 0px;
+    margin-top:8px;
 }
 
 #output #root ul {
@@ -982,7 +983,7 @@ div#editor-footer div{
 }
 #editor-header .tab {
     color: grey;
-    font-family:Inter;
+    font-family: 'DM sans', sans-serif;
     font-weight: 600;
     font-size: 12px;
     cursor: pointer;

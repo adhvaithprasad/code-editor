@@ -10,80 +10,69 @@ function updatePosition() {
 
   // Update the button text
   const button = document.getElementById('positionButton');
-  button.innerHTML = `Line: ${position.lineNumber}, Column: ${position.column}`;
+  button.innerHTML = `Line: ${position.lineNumber}, Column: ${position.column}`; 
 }
 let parameters = [];
 let addOrSwitchTab;
 function init() {
- 
-  // Configure the paths for Monaco editor
+  // Configure the paths for Monaco editor with a more reliable CDN
   require.config({
     paths: {
-      vs: "https://unpkg.com/monaco-editor@latest/min/vs"
+      vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs"
     }
   });
 
-  // Define the Monaco environment and worker URL
+  // Create a worker URL for Monaco editor before defining MonacoEnvironment
+  let workerURL = URL.createObjectURL(new Blob([
+    `self.MonacoEnvironment = { baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/' };
+    importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/base/worker/workerMain.js');`
+  ], { type: "text/javascript" }));
+
   window.MonacoEnvironment = {
     getWorkerUrl: () => workerURL
   };
 
-  // Create a worker URL for Monaco editor
-  let workerURL = URL.createObjectURL(new Blob([`
-        self.MonacoEnvironment = {
-            baseUrl: 'https://unpkg.com/monaco-editor@latest/min/'
-        };
-        importScripts('https://unpkg.com/monaco-editor@latest/min/vs/base/worker/workerMain.js');
-    `], {
-    type: "text/javascript"
-  }));
-
   // Load Monaco editor and set up its configuration
-  require(["vs/editor/editor.main"], function() {
+  require(["vs/editor/editor.main"], function () {
     window.editor = monaco.editor.create(document.getElementById("firepad-container"), {
-      minimap: {
-        enabled: false
-      },
-       wordWrap: 'on', 
-
+      minimap: { enabled: false },
+      wordWrap: 'on',
       theme: "vs-dark"
     });
-    window.diffEditor = monaco.editor.createDiffEditor(document.getElementById("firepad-diff-container"),{
-    // You can optionally disable the resizing
-    enableSplitViewResizing: false,
+    
+    if (document.getElementById("firepad-diff-container")) {
+      window.diffEditor = monaco.editor.createDiffEditor(document.getElementById("firepad-diff-container"), {
+        enableSplitViewResizing: false,
+        renderSideBySide: false,
+      });
+    }
 
-    // Render the diff inline
-    renderSideBySide: false,
-  });
     const tabContainer = document.getElementById('editor-header');
+    filetab();
 
-     filetab()
-    // Function to create a new model for a file
     function createModel(fileName, content) {
       const model = monaco.editor.createModel(content, undefined, monaco.Uri.file(fileName));
       editorModels[fileName] = model;
       return model;
     }
 
-    // Function to switch between tabs or add a new one if it doesn't exist
-    addOrSwitchTab = async function(fileName, content,source) {
-if(!editorModels["original--diffmodel-"+fileName]){
-   if(source === "github"){
-   createModel("original--diffmodel-"+fileName, content);
- }
-      else if(source === "custom"){
-        var diffvalue = await getdiffcontent(fileName);
-    
-        createModel("original--diffmodel-"+fileName, diffvalue);
+    addOrSwitchTab = async function (fileName, content, source) {
+      if (!editorModels["original--diffmodel-" + fileName]) {
+        if (source === "github") {
+          createModel("original--diffmodel-" + fileName, content);
+        } else if (source === "custom") {
+          var diffvalue = await getdiffcontent(fileName);
+          createModel("original--diffmodel-" + fileName, diffvalue);
+        }
       }
-}
+      
       if (typeof fileName === "string") {
-        filen = fileName
+        filen = fileName;
         if (!editorModels[fileName]) {
           const tab = document.createElement('div');
           tab.className = 'tab';
           tab.id = fileName + "--tab";
-          tab.textContent = fileName.split("/")[fileName.split("/").length - 1];
+          tab.textContent = fileName.split("/").pop();
           tab.addEventListener('click', () => {
             switchTab(fileName, fileName + "--tab");
           });
@@ -91,16 +80,14 @@ if(!editorModels["original--diffmodel-"+fileName]){
           tabContainer.appendChild(tab);
           createModel(fileName, content);
         }
-        switchTab(fileName, fileName + "--tab",content);
-      }
-      else {
-
+        switchTab(fileName, fileName + "--tab", content);
+      } else {
         if (!editorModels[fileName.name]) {
-          filen = fileName.name
+          filen = fileName.name;
           const tab = document.createElement('div');
           tab.className = 'tab';
           tab.id = fileName.name + "--tab";
-          tab.textContent = fileName.name.split("/")[fileName.name.split("/").length - 1];
+          tab.textContent = fileName.name.split("/").pop();
           tab.addEventListener('click', () => {
             switchTab(fileName.name, fileName.name + "--tab");
           });
@@ -110,53 +97,40 @@ if(!editorModels["original--diffmodel-"+fileName]){
         }
         switchTab(fileName.name, fileName.name + "--tab");
       }
-
-
     };
 
-    // Function to switch between tabs
-    function switchTab(fileName, m) {
+    function switchTab(fileName, tabId) {
       const model = editorModels[fileName];
       filen = fileName;
-      const original = editorModels["original--diffmodel-"+fileName];
+      const original = editorModels["original--diffmodel-" + fileName];
       if (model) {
-        const activeTabs = document.querySelectorAll('.active-file-tab');
-
-        // Iterate through the selected elements and remove the class
-        activeTabs.forEach(tab => {
-          tab.classList.remove('active-file-tab');
-        });
-        document.getElementById(m).classList.add("active-file-tab");
+        document.querySelectorAll('.active-file-tab').forEach(tab => tab.classList.remove('active-file-tab'));
+        document.getElementById(tabId).classList.add("active-file-tab");
         window.editor.setModel(model);
-        if(original){
-          window.diffEditor.setModel({
-  original: original,
-  modified: model,
-});
+        if (original) {
+          window.diffEditor.setModel({ original: original, modified: model });
         }
-
       }
-    };
+    }
 
     monaco.languages.register({ id: 'custom-lang' });
 
-    // Add an event listener to update the button text on cursor position change
     window.editor.onDidChangeCursorPosition(updatePosition);
-
-    // Initial update
     updatePosition();
-    let currentUser = firebase.auth().currentUser;
-    window.editor.onDidChangeModelContent((event) => {
-      render(filen)
-      
+
+    let debounceTimer;
+    window.editor.onDidChangeModelContent(() => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => render(filen), 300);
     });
 
-
-
-
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        console.log("User authenticated:", user);
+      }
+    });
   });
-
-  }
+}
 
 
 const editorElement = document.querySelector(".monaco-editor");

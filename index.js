@@ -7,7 +7,7 @@ const { promisify } = require("util");
 const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
-const pty = require("node-pty");
+
 const { Git: Server } = require("node-git-server");
 const app = express();
 const server = http.createServer(app);
@@ -22,34 +22,19 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const repos = new Server(path.resolve(__dirname, "tmp"), {
+const repos = new Server(path.resolve(__dirname, "assets"), {
   autoCreate: true,
 });
 
 
-wss.on("connection", (ws) => {
-  const shell = pty.spawn("bash", [], {
-    name: "xterm-color",
-    cols: 80,
-    rows: 24,
-    cwd: process.env.HOME,
-    env: process.env,
-  });
 
-  shell.on("data", (data) => {
-    ws.send(data.toString());
-  });
-
-  ws.on("message", (msg) => {
-    shell.write(msg);
-  });
-});
 
 const port = process.env.PORT || 8000;
 
-function clone(rdir, url) {
+async function clone(rdir, url) {
   const dir = path.join(process.cwd(), "assets", rdir);
-  git.clone({ fs, http, dir, url }).then(console.log);
+  const x = await git.clone({ fs, http, dir, url }).then(console.log);
+  return x;
 }
 async function list(rdir) {
   const dir = path.join(process.cwd(), "assets", rdir);
@@ -133,12 +118,20 @@ app.get("/commits/:repo", async (req, res) => {
   }
 });
 
-app.post("/clone", (req, res) => {
- 
+app.post("/clone", async (req, res) => {
+ console.log(req.body);
   const url = req.body.url;
   const dir = req.body.dir;
-  clone(dir, url);
-  console.log(url,dir)
+  try {
+    const r = await clone(dir, url);
+    res.send({ status: "done" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+  console.log(url,dir);
+ 
+  
   res.json({ message: "t" });
 });
 

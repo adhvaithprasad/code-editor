@@ -1,7 +1,3 @@
-/**
- * Firebase configuration and initialization.
- * Configures the Firebase SDK with the provided credentials.
- */
 var config = {
     apiKey: "AIzaSyC-3XDB0vSiQlbGL-Sa9rOiteFYitYfstw",
     authDomain: "firescrypt-web.firebaseapp.com",
@@ -22,29 +18,22 @@ const afterEditorIndex = url.indexOf("/editor/") + "/editor/".length;
 
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-        const uid = user.uid;
-      getRepoFiles();
-          document.getElementById("no-repo-chosen").style.display = "none";
-
-                document.querySelector(".main--editor").style.display = "block";
-      init();
-
-        // Display user image
-
-
-        if (user !== null) {
-            user.providerData.forEach(providerData => {
-                document.getElementById("user-image-editor").src = providerData.photoURL;
-            });
-        }
+         const uid = user.uid;
+         getRepoFiles();
+         document.getElementById("no-repo-chosen").style.display = "none";
+         document.querySelector(".main--editor").style.display = "block";
+         init();
+         document.getElementById("user-image-editor").src = user.photoURL;
     } else {
         
-        if (afterEditorIndex !== -1) {
-            const afterEditor = url.substring(afterEditorIndex);
-            window.location.href = "http://localhost:8000/signup/"+afterEditor;
-        } else {
-            console.log("No '/editor/' found in the URL.");
-        }
+      firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .then((result) => {
+          console.log("User signed in:", result.user);
+      })
+      .catch((error) => {
+          console.error("Sign-in error:", error);
+      });
+  
     }
 });
 
@@ -53,11 +42,8 @@ function expand(m){
 
   var n = document.getElementById(m).style.display;
 
-if (n === "none") {
-  document.getElementById(m).style.display="block";
-}  else {
-  document.getElementById(m).style.display="none";
-}
+     if (n === "none") { document.getElementById(m).style.display="block"; } 
+     else { document.getElementById(m).style.display="none"; }
 }
 function sidebar(){
   
